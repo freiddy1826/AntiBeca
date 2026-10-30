@@ -1,0 +1,246 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AntiBeca.ViewModels"
+             xmlns:models="clr-namespace:AntiBeca.Models"
+             x:Class="AntiBeca.MainPage"
+             x:DataType="vm:MainViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="#0D1117"
+             Title="AntiBeca">
+
+    <ContentPage.Resources>
+        <!-- Colores -->
+        <Color x:Key="Fondo">#0D1117</Color>
+        <Color x:Key="ColorTarjeta">#161B22</Color>
+        <Color x:Key="Borde">#30363D</Color>
+        <Color x:Key="Acento">#22C55E</Color>
+        <Color x:Key="TextoPrincipal">#E6EDF3</Color>
+        <Color x:Key="TextoSuave">#8B949E</Color>
+        <Color x:Key="Peligro">#F85149</Color>
+
+        <!-- Estilos generales -->
+        <Style TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource TextoPrincipal}"/>
+        </Style>
+
+        <Style TargetType="Entry">
+            <Setter Property="TextColor" Value="{StaticResource TextoPrincipal}"/>
+            <Setter Property="PlaceholderColor" Value="{StaticResource TextoSuave}"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource Fondo}"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="Picker">
+            <Setter Property="TextColor" Value="{StaticResource TextoPrincipal}"/>
+            <Setter Property="TitleColor" Value="{StaticResource TextoSuave}"/>
+            <Setter Property="BackgroundColor" Value="{StaticResource Fondo}"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource Acento}"/>
+            <Setter Property="TextColor" Value="{StaticResource Fondo}"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="HeightRequest" Value="44"/>
+            <Setter Property="Padding" Value="16,0"/>
+        </Style>
+
+        <!-- Estilos con nombre -->
+        <Style x:Key="Titulo" TargetType="Label">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontAttributes" Value="Bold"/>
+            <Setter Property="TextColor" Value="{StaticResource TextoPrincipal}"/>
+        </Style>
+
+        <Style x:Key="Tarjeta" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="{StaticResource ColorTarjeta}"/>
+            <Setter Property="Stroke" Value="{StaticResource Borde}"/>
+            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="16"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BotonX" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="TextColor" Value="{StaticResource TextoSuave}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="WidthRequest" Value="32"/>
+            <Setter Property="HeightRequest" Value="32"/>
+        </Style>
+
+        <Style x:Key="BotonSecundario" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{StaticResource Fondo}"/>
+            <Setter Property="TextColor" Value="{StaticResource TextoPrincipal}"/>
+            <Setter Property="BorderColor" Value="{StaticResource Borde}"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="HeightRequest" Value="40"/>
+            <Setter Property="Padding" Value="14,0"/>
+        </Style>
+
+        <Style x:Key="BotonPeligro" TargetType="Button">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="TextColor" Value="{StaticResource Peligro}"/>
+            <Setter Property="BorderColor" Value="{StaticResource Peligro}"/>
+            <Setter Property="BorderWidth" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="HeightRequest" Value="44"/>
+        </Style>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16" MaximumWidthRequest="640">
+
+            <!-- Encabezado -->
+            <VerticalStackLayout Spacing="2" Margin="0,10,0,6">
+                <Label Text="💸 AntiBeca" FontSize="32" FontAttributes="Bold"
+                       TextColor="{StaticResource Acento}" HorizontalOptions="Center"/>
+                <Label Text="Divide la cuenta sin pelear" FontSize="15"
+                       TextColor="{StaticResource TextoSuave}" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <!-- 1. Personas -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="👥 Personas" Style="{StaticResource Titulo}"/>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Entry Grid.Column="0" Placeholder="Nombre de la persona"
+                               Text="{Binding NombrePersona}"
+                               ReturnCommand="{Binding AgregarPersonaCommand}"/>
+                        <Button Grid.Column="1" Text="Agregar"
+                                Command="{Binding AgregarPersonaCommand}"/>
+                    </Grid>
+
+                    <FlexLayout Wrap="Wrap" BindableLayout.ItemsSource="{Binding Personas}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Border BackgroundColor="{StaticResource Fondo}"
+                                        Stroke="{StaticResource Acento}" StrokeThickness="1"
+                                        Padding="12,2,4,2" Margin="0,0,8,8"
+                                        StrokeShape="RoundRectangle 20">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="{Binding .}" VerticalOptions="Center"/>
+                                        <Button Text="✕" Style="{StaticResource BotonX}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=QuitarPersonaCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </FlexLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 2. Artículos -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="🍕 Artículos" Style="{StaticResource Titulo}"/>
+
+                    <Entry Placeholder="Artículo (ej. Pizza)" Text="{Binding NombreArticulo}"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <Entry Grid.Column="0" Placeholder="Precio" Keyboard="Numeric"
+                               Text="{Binding PrecioArticulo}"/>
+                        <Picker Grid.Column="1" Title="¿Quién lo pidió?"
+                                ItemsSource="{Binding Personas}"
+                                SelectedItem="{Binding PersonaSeleccionada}"/>
+                    </Grid>
+                    <Button Text="＋ Agregar artículo" Command="{Binding AgregarArticuloCommand}"/>
+
+                    <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding Articulos}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:Articulo">
+                                <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="0,6">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Persona, StringFormat='👤 {0}'}" FontSize="12"
+                                               TextColor="{StaticResource TextoSuave}"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="1" VerticalOptions="Center"
+                                           Text="{Binding Precio, StringFormat='{0:C2}'}"/>
+                                    <Button Grid.Column="2" Text="✕" Style="{StaticResource BotonX}"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=QuitarArticuloCommand}"
+                                            CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 3. Propina -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="💰 Propina (%)" Style="{StaticResource Titulo}"/>
+                    <Entry Keyboard="Numeric" Text="{Binding PropinaTexto}"
+                           HorizontalOptions="Start" WidthRequest="120"/>
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="0%" Style="{StaticResource BotonSecundario}"
+                                Command="{Binding FijarPropinaCommand}" CommandParameter="0"/>
+                        <Button Text="10%" Style="{StaticResource BotonSecundario}"
+                                Command="{Binding FijarPropinaCommand}" CommandParameter="10"/>
+                        <Button Text="15%" Style="{StaticResource BotonSecundario}"
+                                Command="{Binding FijarPropinaCommand}" CommandParameter="15"/>
+                        <Button Text="20%" Style="{StaticResource BotonSecundario}"
+                                Command="{Binding FijarPropinaCommand}" CommandParameter="20"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- 4. Resumen -->
+            <Label Text="🧾 Cuánto paga cada quien" Style="{StaticResource Titulo}" Margin="4,8,0,0"/>
+
+            <VerticalStackLayout Spacing="10" BindableLayout.ItemsSource="{Binding Resumen}">
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate x:DataType="models:ResumenPersona">
+                        <Border Style="{StaticResource Tarjeta}">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="2">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Nombre}"
+                                       FontSize="18" FontAttributes="Bold"/>
+                                <Label Grid.Row="0" Grid.Column="1"
+                                       Text="{Binding Total, StringFormat='{0:C2}'}"
+                                       FontSize="20" FontAttributes="Bold"
+                                       TextColor="{StaticResource Acento}"/>
+                                <Label Grid.Row="1" Grid.Column="0" Text="Consumo"
+                                       TextColor="{StaticResource TextoSuave}"/>
+                                <Label Grid.Row="1" Grid.Column="1"
+                                       Text="{Binding Subtotal, StringFormat='{0:C2}'}"
+                                       TextColor="{StaticResource TextoSuave}"/>
+                                <Label Grid.Row="2" Grid.Column="0" Text="Propina"
+                                       TextColor="{StaticResource TextoSuave}"/>
+                                <Label Grid.Row="2" Grid.Column="1"
+                                       Text="{Binding Propina, StringFormat='{0:C2}'}"
+                                       TextColor="{StaticResource TextoSuave}"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
+            </VerticalStackLayout>
+
+            <!-- Total general -->
+            <Border BackgroundColor="{StaticResource Acento}" StrokeThickness="0"
+                    Padding="16" StrokeShape="RoundRectangle 16">
+                <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
+                    <Label Text="Total de la cuenta" TextColor="{StaticResource Fondo}"
+                           HorizontalOptions="Center"/>
+                    <Label Text="{Binding TotalGeneral, StringFormat='{0:C2}'}"
+                           FontSize="32" FontAttributes="Bold"
+                           TextColor="{StaticResource Fondo}" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding Mensaje}" TextColor="{StaticResource Peligro}"
+                   HorizontalOptions="Center"/>
+
+            <Button Text="Limpiar todo" Style="{StaticResource BotonPeligro}"
+                    Command="{Binding LimpiarTodoCommand}" Margin="0,0,0,20"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
